@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molis</title>
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            background: url('https://i.ibb.co/MpcCH5J/Picsart-24-07-30-13-49-15-078.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        #candle-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .candle {
+            position: absolute;
+            width: 50px;
+            height: 150px;
+            cursor: pointer;
+            transition: filter 0.3s ease;
+        }
+        .candle.lit {
+            filter: brightness(1);
+        }
+        .target {
+            position: absolute;
+            top: 60%;
+            left: 58%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 150px;
+        }
+        .target2 {
+            position: absolute;
+            top: 45%;
+            left: 68%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div id="candle-container">
+        <img src="https://i.ibb.co/vvbYqKj/Picsart-24-07-30-13-41-49-578.png" alt="Candle" class="candle" id="candle1" draggable="true">
+        <img src="https://i.ibb.co/vvbYqKj/Picsart-24-07-30-13-41-49-578.png" alt="Candle" class="candle" id="candle2" draggable="true" style="top: 25%;">
+        <div class="target"></div>
+        <div class="target2"></div> <!-- Added second target area -->
+    </div>
+
+    <script>
+        let draggedElement = null;
+
+        document.addEventListener('dragstart', function(event) {
+            draggedElement = event.target;
+        });
+
+        document.addEventListener('dragover', function(event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('drop', function(event) {
+            event.preventDefault();
+            if (event.target.classList.contains('target') || event.target.classList.contains('target2')) {
+                draggedElement.classList.add('lit');
+                draggedElement.style.top = event.clientY - draggedElement.offsetHeight / 2 + 'px';
+                draggedElement.style.left = event.clientX - draggedElement.offsetWidth / 2 + 'px';
+
+                // Change the image source when the candle is lit
+                draggedElement.src = "https://i.ibb.co/t38dKgs/image.png";
+            }
+        });
+
+        // For mobile drag functionality
+        document.querySelectorAll('.candle').forEach(candle => {
+            candle.addEventListener('touchstart', function(event) {
+                draggedElement = event.target;
+            });
+
+            candle.addEventListener('touchmove', function(event) {
+                const touch = event.touches[0];
+                draggedElement.style.top = touch.clientY - draggedElement.offsetHeight / 2 + 'px';
+                draggedElement.style.left = touch.clientX - draggedElement.offsetWidth / 2 + 'px';
+            });
+
+            candle.addEventListener('touchend', function(event) {
+                if (event.target.classList.contains('target') || event.target.classList.contains('target2')) {
+                    draggedElement.classList.add('lit');
+                    // Change the image source when the candle is lit
+                    draggedElement.src = "https://m.media-amazon.com/images/I/619OpsoGEwL._AC_UF894,1000_QL80_.jpg";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
